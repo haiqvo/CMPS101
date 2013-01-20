@@ -1,5 +1,3 @@
-import gameoflife.GridCell;
-import gameoflife.Cells;
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.*;
@@ -15,14 +13,32 @@ import static java.lang.System.*;
  * @author hai
  */
 public class GameOfLife {
-
+    static int generations;
+    static int numOfCells;
+    
     /**
      * @param args the command line arguments
      */
     static void scanfile (Scanner input, String filename) {
+        GridCell grid = new GridCell();
+        int lineNumber = 0;
         while (input.hasNext()){
-            String line = input.next();
-            System.out.println(line);
+            if (lineNumber == 0) {
+                int num = input.nextInt();
+                generations = num;
+            } else if (lineNumber == 1) {
+                int num = input.nextInt();
+                numOfCells = num;
+            } else {
+                int num = input.nextInt();
+                int nextNum = input.nextInt();
+                grid.fillCells(num, nextNum);
+            }
+            for(int i=1; i<=generations; i++){
+                
+            }
+            //System.out.println(num + "=" + lineNumber);
+            lineNumber++;
         }
     }
     public static void main(String[] args) {
@@ -48,4 +64,5 @@ public class GameOfLife {
         
         // TODO code application logic here
     }
+
 }

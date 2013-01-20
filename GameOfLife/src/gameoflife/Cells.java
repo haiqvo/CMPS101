@@ -9,5 +9,6 @@ package gameoflife;
  * @author hai
  */
 public class Cells {
+    int[] aliveCells;
     
 }
