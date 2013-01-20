@@ -15,12 +15,6 @@ public class GridCell {
     int yCor;
     int counts;
     int status;
-    public GridCell(int x, int y, int count, int stat){
-        xCor = x;
-        yCor = y;
-        counts = count;
-        status = stat;
-    }
     public void test(){
         System.out.println("hello World");
         System.out.printf("%d, %d, %d, %d, \n", xCor, yCor, counts, status);
