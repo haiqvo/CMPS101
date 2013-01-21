@@ -22,7 +22,7 @@ public class GameOfLife {
     static void scanfile (Scanner input, String filename) {
         GridCell grid = new GridCell();
         int lineNumber = 0;
-        grid.createCells(31, 31);
+        grid.createCells(50, 50);
         while (input.hasNext()){
             if (lineNumber == 0) {
                 int num = input.nextInt();

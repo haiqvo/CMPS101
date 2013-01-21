@@ -9,11 +9,12 @@
  * @author hai
  */
 public class Cells {
-    int counts = 0;
+    int counts = 1;
     int alive = 0;
     int x;
     int y;
     Cells pointer;
-    public Cells(){
+    public Cells(int i){
+        counts = 0;
     }
 }

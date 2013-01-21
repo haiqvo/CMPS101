@@ -23,7 +23,7 @@ public class GridCell {
         grid = new Cells[size1][size2];
         for(int k = 0; k<size1; k++){
             for(int j = 0; j < size2; j++){
-                grid[k][j] = new Cells();
+                grid[k][j] = new Cells(0);
             }
         }
     }
@@ -54,13 +54,18 @@ public class GridCell {
     public void CheckForRepeats(int i, int x, int y){
         int xCor = aliveCells.get(i).x;
         int yCor = aliveCells.get(i).y;
-        if(collectionsOfCells.indexOf(grid[xCor+x][yCor+y]) == -1){
+        int index = collectionsOfCells.indexOf(grid[xCor+x][yCor+y]);
+        if(!collectionsOfCells.contains(grid[xCor+x][yCor+y])){
             if(xCor+x < aliveCells.size() || xCor+x > 0){
                 if(yCor+y < aliveCells.size() || yCor+y > 0){
                     collectionsOfCells.add(grid[xCor+x][yCor+y]);
+                    collectionsOfCells.get(index).counts = 1;
                 }
             }
+        }else{
+            collectionsOfCells.get(index).counts++;
         }
+        //
     }
     public void printTest(){
         for(int k = 0; k<grid.length; k++){
@@ -70,6 +75,9 @@ public class GridCell {
         }
     }
     public void printTest2(){
+        for(int i = 0; i<collectionsOfCells.size();i++){
+            System.out.println(collectionsOfCells.get(i)+":"+collectionsOfCells.get(i).counts);
+        }
         System.out.println(collectionsOfCells);
         System.out.println(grid[19][20]);
         
