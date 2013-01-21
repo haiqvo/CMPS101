@@ -14,7 +14,7 @@ import static java.lang.System.*;
  */
 public class GameOfLife {
     static int generations;
-    static int numOfCells;
+    static int numOfCells = 1;
     
     /**
      * @param args the command line arguments
@@ -31,17 +31,20 @@ public class GameOfLife {
                 int num = input.nextInt();
                 numOfCells = num;
             } else {
+                numOfCells--;
                 int num = input.nextInt();
                 int nextNum = input.nextInt();
                 grid.fillCells(num, nextNum);
             }
-            
-            
+            if(numOfCells == 0){
+                break;
+            }
             //System.out.println(num + "=" + lineNumber);
             lineNumber++;
         }
+        grid.printGrid();
         for(int i=1; i<=1; i++){
-                grid.cycleCells();
+            grid.cycleCells();
         }
         grid.printTest2();
     }
