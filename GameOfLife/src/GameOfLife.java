@@ -35,13 +35,15 @@ public class GameOfLife {
                 int nextNum = input.nextInt();
                 grid.fillCells(num, nextNum);
             }
-            for(int i=1; i<=generations; i++){
-                
-            }
-            //grid.printTest();
+            
+            
             //System.out.println(num + "=" + lineNumber);
             lineNumber++;
         }
+        for(int i=1; i<=1; i++){
+                grid.cycleCells();
+        }
+        grid.printTest2();
     }
     public static void main(String[] args) {
       try {

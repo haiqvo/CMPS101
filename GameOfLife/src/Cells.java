@@ -11,8 +11,9 @@
 public class Cells {
     int counts = 0;
     int alive = 0;
-    public Cells(int x, int y){
-        counts = x;
-        alive = y;
+    int x;
+    int y;
+    Cells pointer;
+    public Cells(){
     }
 }
