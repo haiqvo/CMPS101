@@ -15,30 +15,34 @@ import java.util.*;
 public class GridCell {
     int counter = 0;
     Cells[][] grid;
-    //private class aliveCells{
-        
-    //}
     ArrayList<Cells> aliveCells = new ArrayList<Cells>();
     ArrayList<Cells> collectionsOfCells = new ArrayList<Cells>();
-    public void createCells(int size1, int size2){
-        grid = new Cells[size1][size2];
-        for(int k = 0; k<size1; k++){
-            for(int j = 0; j < size2; j++){
+    public void createCells(int size){
+        grid = new Cells[size][size];
+        for(int k = 0; k<size; k++){
+            for(int j = 0; j < size; j++){
                 grid[k][j] = new Cells(k,j,0);
             }
         }
     }
     public void fillCells(int x,int y ){
-        grid[x][y].x = x;
+        if(x<grid.length){
+            grid[x][y].x = x;
+        }else{
+            return;
+        }
+        if(y<grid.length){
+            grid[x][y].y = y;
+        }else{
+            return;
+        }
         grid[x][y].y = y;
         grid[x][y].alive = 1;
         grid[x][y].counts = 0;
         aliveCells.add(grid[x][y]);
         int location = aliveCells.size()-1;
         grid[x][y].pointer = aliveCells.get(location);
-        //System.out.println(counter+":"+x+" "+y);
         counter++;
-        //System.out.println(x+","+y);
     }
     
     public void cycleCells(){
@@ -52,15 +56,6 @@ public class GridCell {
             CheckForRepeats(i, 0, 1);
             CheckForRepeats(i, 1, 1);
         }
-        /*
-        for(int i = 0; i<collectionsOfCells.size();i++){
-            int xCor = collectionsOfCells.get(i).x;
-            int yCor = collectionsOfCells.get(i).y;
-            int index = collectionsOfCells.indexOf(grid[xCor][yCor]);
-            collectionsOfCells.get(index).counts++;
-        }
-         * 
-         */
     }
     public void CheckForRepeats(int i, int x, int y){
         int xCor = aliveCells.get(i).x;
@@ -73,7 +68,6 @@ public class GridCell {
                     if(yCor+y < grid.length || yCor+y >= 0){
                         grid[xCor+x][yCor+y].counts++;
                         collectionsOfCells.add(grid[xCor+x][yCor+y]);
-                        //collectionsOfCells.get(index).counts++;
                     }
                 }
             }else{
@@ -85,8 +79,8 @@ public class GridCell {
     }
     
     public void printGrid(){
-        for(int k = 0; k<40; k++){
-            for(int j = 0; j<40; j++){
+        for(int k = 0; k<30; k++){
+            for(int j = 0; j<30; j++){
                 if(aliveCells.contains(grid[k][j].pointer)){
                     System.out.print("O");
                 }else{
@@ -145,11 +139,6 @@ public class GridCell {
         for(int i = 0; i<aliveCells.size();i++){
             System.out.println(aliveCells.get(i).x+","+aliveCells.get(i).y+":"+aliveCells.get(i).counts);
         }
-          
-         
-        //System.out.println(collectionsOfCells);
-        //System.out.println(grid.length);
-        
     }
     public void printTest3(){
         for(int i = 0; i<aliveCells.size();i++){
