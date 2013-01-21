@@ -7,6 +7,7 @@
 import java.io.PrintStream;
 import java.util.*;
 
+
 /**
  *
  * @author hai
@@ -51,12 +52,15 @@ public class GridCell {
             CheckForRepeats(i, 0, 1);
             CheckForRepeats(i, 1, 1);
         }
+        /*
         for(int i = 0; i<collectionsOfCells.size();i++){
             int xCor = collectionsOfCells.get(i).x;
             int yCor = collectionsOfCells.get(i).y;
             int index = collectionsOfCells.indexOf(grid[xCor][yCor]);
             collectionsOfCells.get(index).counts++;
         }
+         * 
+         */
     }
     public void CheckForRepeats(int i, int x, int y){
         int xCor = aliveCells.get(i).x;
@@ -67,13 +71,13 @@ public class GridCell {
             if(!collectionsOfCells.contains(grid[xCor+x][yCor+y])){
                 if(xCor+x < grid.length || xCor+x >= 0){
                     if(yCor+y < grid.length || yCor+y >= 0){
+                        grid[xCor+x][yCor+y].counts++;
                         collectionsOfCells.add(grid[xCor+x][yCor+y]);
                         //collectionsOfCells.get(index).counts++;
                     }
                 }
             }else{
                 collectionsOfCells.get(index).counts++;
-                //aliveCells.get(aliveIndex).counts++;
             }
         }else{
             aliveCells.get(aliveIndex).counts++;
@@ -83,13 +87,46 @@ public class GridCell {
     public void printGrid(){
         for(int k = 0; k<40; k++){
             for(int j = 0; j<40; j++){
-                if(grid[k][j].alive == 1){
+                if(aliveCells.contains(grid[k][j].pointer)){
                     System.out.print("O");
                 }else{
                     System.out.print("X");
                 }
             }
             System.out.println();
+        }
+    }
+    public void ruling(){
+        int size = aliveCells.size();
+        for(int i = 0; i<size;i++){
+            if(aliveCells.get(i).counts == 2 || aliveCells.get(i).counts == 3){
+                continue;
+            }else{
+                aliveCells.get(i).alive = 0;
+                aliveCells.get(i).counts = 0;
+                aliveCells.remove(i);
+                size--;
+                i--;
+            }
+        }      
+        for(int i = 0; i<collectionsOfCells.size();i++){
+            if(collectionsOfCells.get(i).counts == 3){
+                collectionsOfCells.get(i).alive = 1;
+                aliveCells.add(collectionsOfCells.get(i));
+                grid[aliveCells.get(aliveCells.size()-1).x]
+                        [aliveCells.get(aliveCells.size()-1).y].pointer
+                        = aliveCells.get(aliveCells.size()-1);
+            }
+        } 
+         
+    }
+    public void finishCycle(){
+        for(int i = 0; i<collectionsOfCells.size();i++){
+            collectionsOfCells.get(i).counts = 0;
+        }
+        collectionsOfCells.clear();
+        for(int i = 0; i<aliveCells.size();i++){
+            aliveCells.get(i).counts = 0;
         }
     }
     public void printTest(){
@@ -100,6 +137,7 @@ public class GridCell {
         }
     }
     public void printTest2(){
+        
         for(int i = 0; i<collectionsOfCells.size();i++){
             System.out.println(collectionsOfCells.get(i).x+","+collectionsOfCells.get(i).y+":"+collectionsOfCells.get(i).counts);
         }
@@ -107,8 +145,19 @@ public class GridCell {
         for(int i = 0; i<aliveCells.size();i++){
             System.out.println(aliveCells.get(i).x+","+aliveCells.get(i).y+":"+aliveCells.get(i).counts);
         }
-        System.out.println(collectionsOfCells);
-        System.out.println(grid.length);
+          
+         
+        //System.out.println(collectionsOfCells);
+        //System.out.println(grid.length);
         
+    }
+    public void printTest3(){
+        for(int i = 0; i<aliveCells.size();i++){
+            System.out.println(aliveCells.get(i).x+","+aliveCells.get(i).y+":"+aliveCells.get(i).counts);
+        }
+        System.out.println();
+        for(int i = 0; i<collectionsOfCells.size();i++){
+            System.out.println(collectionsOfCells.get(i).x+","+collectionsOfCells.get(i).y+":"+collectionsOfCells.get(i).counts);
+        }
     }
 }

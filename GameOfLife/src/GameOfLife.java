@@ -43,10 +43,14 @@ public class GameOfLife {
             lineNumber++;
         }
         grid.printGrid();
-        for(int i=1; i<=1; i++){
+        for(int j = 0; j<4; j++){
+            System.out.println();
             grid.cycleCells();
+            //grid.printTest3();
+            grid.ruling();
+            grid.printGrid();
+            grid.finishCycle();
         }
-        grid.printTest2();
     }
     public static void main(String[] args) {
       try {
