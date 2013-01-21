@@ -62,21 +62,27 @@ public class GridCell {
         int xCor = aliveCells.get(i).x;
         int yCor = aliveCells.get(i).y;
         int index = collectionsOfCells.indexOf(grid[xCor+x][yCor+y]);
-        if(!collectionsOfCells.contains(grid[xCor+x][yCor+y])){
-            if(xCor+x < grid.length || xCor+x >= 0){
-                if(yCor+y < grid.length || yCor+y >= 0){
-                    collectionsOfCells.add(grid[xCor+x][yCor+y]);
-                    //collectionsOfCells.get(index).counts++;
+        int aliveIndex = aliveCells.indexOf(grid[xCor][yCor]);
+        if(!aliveCells.contains(grid[xCor+x][yCor+y])){
+            if(!collectionsOfCells.contains(grid[xCor+x][yCor+y])){
+                if(xCor+x < grid.length || xCor+x >= 0){
+                    if(yCor+y < grid.length || yCor+y >= 0){
+                        collectionsOfCells.add(grid[xCor+x][yCor+y]);
+                        //collectionsOfCells.get(index).counts++;
+                    }
                 }
+            }else{
+                collectionsOfCells.get(index).counts++;
+                //aliveCells.get(aliveIndex).counts++;
             }
         }else{
-            collectionsOfCells.get(index).counts++;
+            aliveCells.get(aliveIndex).counts++;
         }
     }
     
     public void printGrid(){
-        for(int k = 0; k<30; k++){
-            for(int j = 0; j<30; j++){
+        for(int k = 0; k<40; k++){
+            for(int j = 0; j<40; j++){
                 if(grid[k][j].alive == 1){
                     System.out.print("O");
                 }else{
@@ -95,7 +101,11 @@ public class GridCell {
     }
     public void printTest2(){
         for(int i = 0; i<collectionsOfCells.size();i++){
-            System.out.println(collectionsOfCells.get(i).x+":"+collectionsOfCells.get(i).counts);
+            System.out.println(collectionsOfCells.get(i).x+","+collectionsOfCells.get(i).y+":"+collectionsOfCells.get(i).counts);
+        }
+        System.out.println();
+        for(int i = 0; i<aliveCells.size();i++){
+            System.out.println(aliveCells.get(i).x+","+aliveCells.get(i).y+":"+aliveCells.get(i).counts);
         }
         System.out.println(collectionsOfCells);
         System.out.println(grid.length);
