@@ -1,0 +1,19 @@
+Conway's Game Of Life
+Author: Hai Vo
+The assignment was to write a version of Conway's Game of Life with a algorithm of O(n). Almost all of the program runs with O(n) with the
+expection of the Grid part. Initializing the 2D array (createCells) and printing (printGrid) it requires requires 2 for loops making it 
+(n^2), but Initializing the 2D array it only needed to be done once in a single run and so should be a problem. The rest of the program is
+(n). Filling the grid (fillCells) with alive cells uses a single while loop to simply take the values from a file or stdin and fills the
+uninitialize alive array. Checking for neighbors and counting both neighbor and alive cells (cycleCells) is done in a single loop that
+basically goes through all of the uninitializes alive cell arrays and inputs all of the neighbors into a uninitializes neighbor cell arrays.
+To increases efficiency the count for but the alive and neighbor cells are also done in the checking for neighbor. Once all the neighbors and
+alive cells are counted the rules of the game come into play (ruling) it uses single loops to check for cases in the uninitialize alive array
+and uninitialize neighbor array. After the rules are done it needs to refresh the count and clear the uninitialize neighbor array. It is done
+in one for loop. Overall with the exception to the beginning the program running in O(n). 
+
+How to run:
+1. The is a Makefile so type "make all" should compile the program.
+2. Next type "java GameOfLife (a input file)" to run the program.
+*the program takes a input file as an agruement*
+*the display is on the console*
+
