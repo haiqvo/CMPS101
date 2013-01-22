@@ -62,7 +62,6 @@ public class GameOfLife {
             grid.printGrid();//print the grid again
             grid.finishCycle();//clean the unintialize array to be used again
         }
-        //grid.printTest3();
     }
     
     /*
