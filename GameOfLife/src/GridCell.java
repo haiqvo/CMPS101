@@ -1,37 +1,50 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @desription GridCells class where the program performs most of 
+ * its actions.
+ * @author Hai Vo
+ * @email hqvo@ucsc.edu
  */
 
-
-import java.io.PrintStream;
 import java.util.*;
 
-
-/**
- *
- * @author hai
- */
 public class GridCell {
-    int counter = 0;
-    Cells[][] grid;
+    Cells[][] grid;//the 2D array 
+    
+    //the unintialize array of live Cells
     ArrayList<Cells> aliveCells = new ArrayList<Cells>();
+    
+    //the unintialize array of neighboring Cells
     ArrayList<Cells> collectionsOfCells = new ArrayList<Cells>();
+    
+    /**
+     * createCells creates a intialized 2D array to start the 
+     * progam
+     * @param size is a int that is used to read in a size 
+     * of the 2D array
+     */
     public void createCells(int size){
-        grid = new Cells[size][size];
-        for(int k = 0; k<size; k++){
+        grid = new Cells[size][size];//creates the size of the 2D array Cells
+        for(int k = 0; k<size; k++){//intializes it 
             for(int j = 0; j < size; j++){
                 grid[k][j] = new Cells(k,j,0);
             }
         }
     }
+    
+    /**
+     * fillCells fills the unintialize alive array with its first values 
+     * this is only called once in a single run and only in the 
+     * beginning.
+     * @param int x and y is the number taken from a file or stdin to tell
+     * where the alive cells intial locations are.
+     */
     public void fillCells(int x,int y ){
-        if(x<grid.length){
+        if(x<grid.length && x>= 0){
             grid[x][y].x = x;
         }else{
             return;
         }
-        if(y<grid.length){
+        if(y<grid.length && y>=0){
             grid[x][y].y = y;
         }else{
             return;
@@ -42,7 +55,6 @@ public class GridCell {
         aliveCells.add(grid[x][y]);
         int location = aliveCells.size()-1;
         grid[x][y].pointer = aliveCells.get(location);
-        counter++;
     }
     
     public void cycleCells(){
@@ -60,7 +72,12 @@ public class GridCell {
     public void CheckForRepeats(int i, int x, int y){
         int xCor = aliveCells.get(i).x;
         int yCor = aliveCells.get(i).y;
-        int index = collectionsOfCells.indexOf(grid[xCor+x][yCor+y]);
+        int index;
+        if(xCor+x<grid.length && xCor+x>= 0 && yCor+y<grid.length && yCor+y>=0){
+            index = collectionsOfCells.indexOf(grid[xCor+x][yCor+y]);
+        }else{
+            return;
+        }
         int aliveIndex = aliveCells.indexOf(grid[xCor][yCor]);
         if(!aliveCells.contains(grid[xCor+x][yCor+y])){
             if(!collectionsOfCells.contains(grid[xCor+x][yCor+y])){
@@ -89,6 +106,10 @@ public class GridCell {
             }
             System.out.println();
         }
+        for(int k = 0; k<30; k++){
+            System.out.print("-");
+        }
+        System.out.println();
     }
     public void ruling(){
         int size = aliveCells.size();
