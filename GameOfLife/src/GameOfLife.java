@@ -18,6 +18,7 @@ import static java.lang.System.*;
 public class GameOfLife {
     //the number of Cycles the Cells will go to
     static int generations;
+    static int gridsize = 30; //control the grid size.
     
     //the number of cells that will be used
     static int numOfCells = 1;
@@ -33,7 +34,7 @@ public class GameOfLife {
     static void scanfile (Scanner input, String filename) {
         GridCell grid = new GridCell();
         int lineNumber = 0; //used to keep track of the order of inputs
-        grid.createCells(50); //creates a 2D array of 50x50.
+        grid.createCells(gridsize); //creates a 2D array of 50x50.
         while (input.hasNext()){ // read until end of file
             if (lineNumber == 0) {//the first line is the number of cycles
                 int num = input.nextInt();

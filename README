@@ -16,4 +16,5 @@ How to run:
 2. Next type "java GameOfLife (a input file)" to run the program.
 *the program takes a input file as an agruement*
 *the display is on the console*
+*In GameOfLife there is a variable called gridsize which controls the size of the grid right now it is defaulted to 30*
 

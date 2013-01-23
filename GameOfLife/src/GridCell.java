@@ -39,15 +39,21 @@ public class GridCell {
      * where the alive cells intial locations are.
      */
     public void fillCells(int x,int y ){
-        if(x<grid.length && x>= 0){//check if the x is within the limit
+        try{
+        //if(x<grid.length && x>= 0){//check if the x is within the limit
             grid[x][y].x = x;//set the x Coor
-        }else{
-            return;//if not return
+        //}
+        }catch ( Exception err ) {
+            System.out.println( err.getMessage( ) + " : x Coor is to large" +
+                    " increase grid size" );
+            System.exit(1);
         }
-        if(y<grid.length && y>=0){//check if the y is within the limit
+        try{
             grid[x][y].y = y;//set the y Coor
-        }else{
-            return;//if not return
+        }catch ( Exception err ) {
+            System.out.println( err.getMessage( ) + " : y Coor is to large" +
+                    " increase grid size" );
+            System.exit(1);
         }
         grid[x][y].alive = 1;//set it to alive
         aliveCells.add(grid[x][y]);//have the unintialize point to cells
@@ -123,12 +129,12 @@ public class GridCell {
      * printGrid print a 30x30 grid using System.out.print
      */
     public void printGrid(){
-        for(int k = 0; k<30; k++){
-            for(int j = 0; j<30; j++){
+        for(int k = 0; k<grid.length; k++){
+            for(int j = 0; j<grid.length; j++){
                 if(aliveCells.contains(grid[k][j].pointer)){
-                    System.out.print("O");//if its alive
+                    System.out.print("X");//if its alive
                 }else{
-                    System.out.print("X");//if its dead
+                    System.out.print("O");//if its dead
                 }
             }
             System.out.println();//seperates the rows
