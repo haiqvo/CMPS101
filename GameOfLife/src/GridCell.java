@@ -8,7 +8,7 @@
 import java.util.*;
 
 public class GridCell {
-    Cells[][] grid;//the 2D array 
+    int[][] grid;//the 2D array 
     
     //the unintialize array of live Cells
     ArrayList<Cells> aliveCells = new ArrayList<Cells>();
@@ -23,10 +23,10 @@ public class GridCell {
      * of the 2D array
      */
     public void createCells(int size){
-        grid = new Cells[size][size];//creates the size of the 2D array Cells
+        grid = new int[size][size];//creates the size of the 2D array Cells
         for(int k = 0; k<size; k++){//intializes it 
             for(int j = 0; j < size; j++){
-                grid[k][j] = new Cells(k,j,0);
+                grid[k][j] = 0;
             }
         }
     }
@@ -39,27 +39,17 @@ public class GridCell {
      * where the alive cells intial locations are.
      */
     public void fillCells(int x,int y ){
-        try{
-        //if(x<grid.length && x>= 0){//check if the x is within the limit
-            grid[x][y].x = x;//set the x Coor
-        //}
-        }catch ( Exception err ) {
-            System.out.println( err.getMessage( ) + " : x Coor is to large" +
-                    " increase grid size" );
-            System.exit(1);
-        }
-        try{
-            grid[x][y].y = y;//set the y Coor
-        }catch ( Exception err ) {
-            System.out.println( err.getMessage( ) + " : y Coor is to large" +
-                    " increase grid size" );
-            System.exit(1);
-        }
-        grid[x][y].alive = 1;//set it to alive
-        aliveCells.add(grid[x][y]);//have the unintialize point to cells
+        aliveCells.add(new Cells(x,y));//have the unintialize point to cells
         int location = aliveCells.size()-1;
         //have cell point to unintialize
-        grid[x][y].pointer = aliveCells.get(location);
+        try{
+        grid[x][y] = location;
+        }catch ( Exception err ) {
+            System.out.println( err.getMessage( ) + 
+                    " : x or y Coor is too large"+
+                    " increase grid size check README" );
+            System.exit(1);
+        }
     }
     
     /**
@@ -68,6 +58,7 @@ public class GridCell {
      */
     public void cycleCells(){
         //goes through all of the unint alive Cells array
+
         for(int i = 0; i<aliveCells.size();i++){
             //8 possible squares
             CheckForRepeats(i, -1, -1);
@@ -89,39 +80,47 @@ public class GridCell {
      * int i is the index of which alive array it is currently on.
      */
     public void CheckForRepeats(int i, int x, int y){
-        int xCor = aliveCells.get(i).x;//get the x Coor of alive cells
-        int yCor = aliveCells.get(i).y;//get the y Coor of alive cells
-        int index;
-        //check if the index it within the graph
-        if(xCor+x<grid.length && xCor+x>= 0 && yCor+y<grid.length && yCor+y>=0){
-            //get the index of where the neighboring cell is store is it is 
-            //already stored
-            index = collectionsOfCells.indexOf(grid[xCor+x][yCor+y]);
+        int xCor = aliveCells.get(i).x + x;//get the x Coor of alive cells
+        int yCor = aliveCells.get(i).y + y;//get the y Coor of alive cells
+        int index = grid[xCor][yCor];
+        if(alive(xCor, yCor)){//if it alive increase the count
+            aliveCells.get(index).counts++;
         }else{
-            return;//if the x or y is too big or small return
-        }
-        //get the index of where the alive cell is store in the unint array
-        int aliveIndex = aliveCells.indexOf(grid[xCor][yCor]);
-        //check if the neighboring cell is not already a alive array
-        if(!aliveCells.contains(grid[xCor+x][yCor+y])){
-            //check if the neighboring cell is not already in the array
-            if(!collectionsOfCells.contains(grid[xCor+x][yCor+y])){
-                //check if the neighboring array exists (corners)
-                if(xCor+x < grid.length || xCor+x >= 0){
-                    if(yCor+y < grid.length || yCor+y >= 0){
-                        //increase the count by one
-                        grid[xCor+x][yCor+y].counts++;
-                        //add it to the unint neighbor array
-                        collectionsOfCells.add(grid[xCor+x][yCor+y]);
-                    }
-                }
-            }else{
-                //if the neighbor array already exists increase the count
+            if(isNeighbor(xCor, yCor)){
+                //if it is already in there increase the count
                 collectionsOfCells.get(index).counts++;
+            }else{
+                Cells newCells = new Cells(xCor,yCor);
+                newCells.counts++;//increase the count
+                collectionsOfCells.add(newCells);//storing the Cells
+                //pointing it back
+                grid[xCor][yCor] = collectionsOfCells.size()-1;
             }
+        }
+    }
+    
+    /*
+     * Check to see if the alive cells is already there.
+     */
+    public boolean alive(int xcoord,int ycoord){
+        int index = grid[xcoord][ycoord];
+        if(index < aliveCells.size() && aliveCells.get(index).x 
+                == xcoord && aliveCells.get(index).y == ycoord)
+            return true;
+        else
+            return false;
+    }
+    
+    /*
+     * Check to see if the neighbor cells is already there.
+     */
+    public boolean isNeighbor(int xcoord, int ycoord){
+        int index = grid[xcoord][ycoord];
+        if(index < collectionsOfCells.size() && collectionsOfCells.get(index).x 
+                == xcoord && collectionsOfCells.get(index).y == ycoord){
+            return true;
         }else{
-            //if there is a alive array next to it increase its count
-            aliveCells.get(aliveIndex).counts++;
+            return false;
         }
     }
     
@@ -131,11 +130,11 @@ public class GridCell {
     public void printGrid(){
         for(int k = 0; k<grid.length; k++){
             for(int j = 0; j<grid.length; j++){
-                if(aliveCells.contains(grid[k][j].pointer)){
-                    System.out.print("X");//if its alive
-                }else{
-                    System.out.print("O");//if its dead
-                }
+                    if(alive(k,j)){
+                        System.out.print("X");//if its alive
+                    }else{
+                        System.out.print("O");//if its dead
+                    }
             }
             System.out.println();//seperates the rows
         }
@@ -157,7 +156,7 @@ public class GridCell {
             }else{
                 aliveCells.get(i).alive = 0;//change to die
                 aliveCells.get(i).counts = 0;//restarts the count
-                aliveCells.remove(i);//remove it from array
+                removeCell(i);
                 size--;//once removed the size will change.
                 i--;//the index has also shifted
             }
@@ -171,11 +170,25 @@ public class GridCell {
                 aliveCells.add(collectionsOfCells.get(i));
                 //point the cell to the unint array
                 grid[aliveCells.get(aliveCells.size()-1).x]
-                        [aliveCells.get(aliveCells.size()-1).y].pointer
-                        = aliveCells.get(aliveCells.size()-1);
+                        [aliveCells.get(aliveCells.size()-1).y]
+                        = aliveCells.size()-1;
             }
         } 
          
+    }
+    
+    /*
+     * How to remove a dead cell for the alive cell array
+     */
+    public void removeCell(int index){
+        if(index < aliveCells.size()){
+            int xcoord = aliveCells.get(aliveCells.size()-1).x;
+            int ycoord = aliveCells.get(aliveCells.size()-1).y;
+            grid[xcoord][ycoord] = index;
+            //sway the one to remove with the last so it does hurt the pointers.
+            aliveCells.set(index, aliveCells.get(aliveCells.size()-1));
+            aliveCells.remove(aliveCells.size()-1);
+        }
     }
     
     /**
@@ -191,6 +204,26 @@ public class GridCell {
         collectionsOfCells.clear(); //clear the neighbor array
         for(int i = 0; i<aliveCells.size();i++){
             aliveCells.get(i).counts = 0;//change count to zero
+        }
+    }
+    /*
+     * Used to debug the Coordinates of alive cells
+     */
+    public void test1(){
+        for(int i = 0; i<aliveCells.size();i++){
+            System.out.println(grid[aliveCells.get(i).x][aliveCells.get(i).y]);
+        }
+    }
+    /*
+     * Used to debug counts of alive and neighbor Cells
+     */
+    public void test2(){
+        for(int i = 0; i<aliveCells.size();i++){
+            System.out.println(aliveCells.get(i).counts);
+        }
+        System.out.println();
+        for(int i = 0; i<collectionsOfCells.size();i++){
+            System.out.println(collectionsOfCells.get(i).counts);
         }
     }
 }

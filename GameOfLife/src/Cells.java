@@ -18,15 +18,14 @@ public class Cells {
     int y;
     
     //a pointer to the unintialized array
-    Cells pointer;
+    int pointer;
     
     /*
      * the constructor of the Cells class that is used to initialize
      * the 2D array for the first time.
      */
-    public Cells(int x, int y, int count){
+    public Cells(int x, int y){
         this.x = x;
         this.y = y;
-        counts = count;
     }
 }
