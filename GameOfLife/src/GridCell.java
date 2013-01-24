@@ -164,7 +164,7 @@ public class GridCell {
         for(int i = 0; i<collectionsOfCells.size();i++){
             //if it has 3 alive cell next to it, it becomes alive
             if(collectionsOfCells.get(i).counts == 3){
-                collectionsOfCells.get(i).alive = 1;
+                collectionsOfCells.get(i).counts = 0;
                 //add it to unint alive array
                 aliveCells.add(collectionsOfCells.get(i));
                 //point the cell to the unint array
