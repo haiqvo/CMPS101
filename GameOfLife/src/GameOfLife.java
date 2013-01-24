@@ -18,7 +18,7 @@ import static java.lang.System.*;
 public class GameOfLife {
     //the number of Cycles the Cells will go to
     static int generations;
-    static int gridsize = 35; //control the grid size.
+    static int gridsize = 100; //control the grid size.
     
     //the number of cells that will be used
     static int numOfCells = 1;

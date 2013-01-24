@@ -128,8 +128,8 @@ public class GridCell {
      * printGrid print a 30x30 grid using System.out.print
      */
     public void printGrid(){
-        for(int k = 0; k<grid.length; k++){
-            for(int j = 0; j<grid.length; j++){
+        for(int k = 0; k<30; k++){
+            for(int j = 0; j<30; j++){
                     if(alive(k,j)){
                         System.out.print("X");//if its alive
                     }else{
