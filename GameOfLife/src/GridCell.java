@@ -152,10 +152,9 @@ public class GridCell {
         int size = aliveCells.size();//store the intial size
         for(int i = 0; i<size;i++){
             if(aliveCells.get(i).counts == 2 || aliveCells.get(i).counts == 3){
+                aliveCells.get(i).counts=0;
                 continue;//if the cell is a 2 or 3 it stays alive
             }else{
-                aliveCells.get(i).alive = 0;//change to die
-                aliveCells.get(i).counts = 0;//restarts the count
                 removeCell(i);
                 size--;//once removed the size will change.
                 i--;//the index has also shifted
@@ -173,7 +172,8 @@ public class GridCell {
                         [aliveCells.get(aliveCells.size()-1).y]
                         = aliveCells.size()-1;
             }
-        } 
+        }
+        collectionsOfCells.clear();
          
     }
     
@@ -191,21 +191,6 @@ public class GridCell {
         }
     }
     
-    /**
-     * finishCycle once the ruling is finish and all of the cells 
-     * that will become alive is stored it is called to reset the
-     * the counts and clear the unint neighboring array
-     */
-    public void finishCycle(){
-        for(int i = 0; i<collectionsOfCells.size();i++){
-            //change the counts to zero
-            collectionsOfCells.get(i).counts = 0;
-        }
-        collectionsOfCells.clear(); //clear the neighbor array
-        for(int i = 0; i<aliveCells.size();i++){
-            aliveCells.get(i).counts = 0;//change count to zero
-        }
-    }
     /*
      * Used to debug the Coordinates of alive cells
      */
