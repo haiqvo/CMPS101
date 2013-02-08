@@ -98,6 +98,26 @@ public class HeapSortTest {
         }
  
     }
+    private void sort(int index){
+        int leftChild = 2*index+1;
+        int rightChild = 2*index+2;
+        int parent = (index-1)/2;
+        if (rightChild >= n && leftChild >= n){
+            siftUp(index);
+        }
+        else if(array[rightChild]<array[index] ||
+                array[leftChild]<array[index]){
+            siftDown(index);
+        }
+        else if (0 < parent){
+            siftDown(index);
+        }
+        else if(array[index]<array[parent]){
+            siftUp(index);
+        }
+        
+        
+    }
  
     /** Helper method for swapping array elements */
     private void swap( int a, int b ) {

@@ -31,8 +31,8 @@ public class BallHeap {
     }
     
     public void delete(int index, int[][] pointer){
-        cd[index] = cd[numNodes-1];
-        if(--numNodes>1) shiftdown(index, pointer);
+        cd[index].collisionTime = Integer.MAX_VALUE;
+        shiftdown(index, pointer);
     }
     
     public int getI(int i){
@@ -55,6 +55,35 @@ public class BallHeap {
             }
         }
         return Integer.MAX_VALUE;
+    }
+    public void update(int i, double time, int[][] pointer){
+        cd[i].collisionTime = time;
+        sort(i, pointer);
+    }
+    
+    private void sort(int index, int[][] pointer){
+        int leftChild = 2*index+1;
+        int rightChild = 2*index+2;
+        int parent = (index-1)/2;
+        if (rightChild >= numNodes && leftChild >= numNodes){
+            shiftup(index, pointer);
+        }
+        else if(cd[rightChild].collisionTime<cd[index].collisionTime ||
+                cd[leftChild].collisionTime<cd[index].collisionTime){
+                shiftdown(index, pointer);
+        }
+        else if (parent <= 0){
+            shiftdown(index, pointer);
+        }
+        else if(cd[index].collisionTime<cd[parent].collisionTime){
+            shiftup(index, pointer);
+        }
+        else if((cd[index].collisionTime==cd[parent].collisionTime)){
+            return;
+        }
+        
+        
+        
     }
     
     public int add ( int i, int j, double time, int[][] pointer){

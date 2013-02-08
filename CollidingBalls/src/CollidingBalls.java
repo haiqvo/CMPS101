@@ -413,7 +413,7 @@ public class CollidingBalls extends JPanel implements ActionListener {
                             //************************************
 				collisionTable[bIndex][i] = collideTime;
                                 heap.delete(table[i][bIndex],table);
-                                heap.add(i, bIndex, collideTime, table);
+                                heap.update(table[i][bIndex], collideTime, table);
                                 //System.out.println(collideTime+" hi ");
                                 
                                 //heap.add(bIndex, i, collisionTable[bIndex][i]);
@@ -433,7 +433,8 @@ public class CollidingBalls extends JPanel implements ActionListener {
 				double rowminTime = collisionTable[i][minCol];
 				collisionTable[i][bIndex] = collideTime;
                                 heap.delete(table[i][bIndex],table);
-                                heap.add(i, bIndex, collideTime, table);
+                                heap.update(table[i][bIndex], collideTime, table);
+                                
                                 //System.out.println(collideTime);
 //                                if(collideTime != Integer.MAX_VALUE){
 //                                    heap.add(i, bIndex, collideTime);
