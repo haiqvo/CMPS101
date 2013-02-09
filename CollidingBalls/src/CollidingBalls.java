@@ -1,5 +1,6 @@
 /* 
  Version 1.1
+ * Editted by Hai Vo implements a heap.
  Fixes the stickyness of the balls.
  Fewer missed collisions. 
  Numerical inaccuracies cause slight drift in the balls. 
@@ -75,7 +76,6 @@ public class CollidingBalls extends JPanel implements ActionListener {
 	static double increment;
 	double timeStep;
 	int tempvar;
-	double[][] collisionTable;                // table that keeps track of time of collision between all objects.
         int[][] table;
         BallHeap heap;
 	int[] rowMinimum;                      // keep track which entry is min for each row in collisionTable.
@@ -120,20 +120,14 @@ public class CollidingBalls extends JPanel implements ActionListener {
                 //*******************************************
                 heap = new BallHeap((1+nCollisionObjects)*(1+nCollisionObjects));
                 table = new int[1+nCollisionObjects] [1 + nCollisionObjects];
-		collisionTable = new double[1+nCollisionObjects] [1 + nCollisionObjects];
+		//collisionTable = new double[1+nCollisionObjects] [1 + nCollisionObjects];
 		for(int i=0;i<=nCollisionObjects;i++) { 
 			for(int j=0;j<=nCollisionObjects;j++) {
-				collisionTable[i][j] = Integer.MAX_VALUE;
+				//collisionTable[i][j] = Integer.MAX_VALUE;
                                 table[i][j] = heap.getIndex();
                                 heap.add(i,j,Integer.MAX_VALUE, table);
 			}
 		}
-                for(int i=0;i<=nCollisionObjects;i++) { 
-			for(int j=0;j<=nCollisionObjects;j++){
-                            System.out.print(heap.getI(table[i][j]) +" " + heap.getJ(table[i][j]) +":");
-                            System.out.println(table[heap.getI(table[i][j])][heap.getJ(table[i][j])]);
-                        }
-                }
 		rowMinimum = new int[1+nCollisionObjects];
 		collisions = new CollisionData[nCollisionObjects];
 		collisionCount = 0;
@@ -225,7 +219,6 @@ public class CollidingBalls extends JPanel implements ActionListener {
 		}
 	}
 	
-	
 	/* Handle collisions of different balls 
 	 *  with m = mass , v = velocity and r = center of ball.
 	 *  in a elastic collision between two balls (m1, v1, r1) and (m2, v2, r2), the new velocities
@@ -293,77 +286,27 @@ public class CollidingBalls extends JPanel implements ActionListener {
 	
 	// look into the table and figure out which collisions will occur first, may be more than one...
 	public void computeCollisionTimes() { 
-		int nCollisionObjects = nballs + nwalls;
-		int minj;
 		double minTime = Integer.MAX_VALUE, time;
-                double fakeMinTime = Integer.MAX_VALUE, fakeTime;
 		collisionCount = 0;
-	   //printTable();
-
-		// ignore the last row..
-                //********************************************
-		for(int i=1;i<nCollisionObjects;i++) { 
-			minj = rowMinimum[i];
-			time = collisionTable[i][minj];
-			if (time < minTime) { 
-				minTime = time;
-			}
-		}
-//                
-                minTime = heap.getMin(table);
-                
-//                table[x][y] = heap.getSortedIndex(x, y);
-                while(heap.min() <= minTime){
-                    int i,j;
-                    i = heap.getI(0);
-                    j = heap.getJ(0);
-                    time = heap.getMin(table);
-//                    CollisionData cd = null;
-//                    if ( i <= nwalls) { 
-//                        cd = new CollisionData(j,i, time);
-//			int bId = j - nwalls;
-//			cd.targetPos1 = Vector.addMult(balls[bId].pos, balls[bId].velocity, (time - globalTime));
-//                    } else {
-//			cd = new CollisionData(i, j, time);
-//			int bId1 = i-nwalls, bId2 = j - nwalls;
-//			cd.targetPos1 = Vector.addMult(balls[bId1].pos, balls[bId1].velocity, (time - globalTime));
-//			cd.targetPos2 = Vector.addMult(balls[bId2].pos, balls[bId2].velocity, (time - globalTime));
-//                    }
-//                    if(verbose) System.out.println("Adding cd =" + cd + "@ t=" + globalTime + " minTime ="+minTime + " ccount="+collisionCount);
-//                    collisions[collisionCount++] = cd;
+          
+                minTime = heap.min();//get the min value which is the first node
+                int i,j;
+                i = heap.getI(0);
+                j = heap.getJ(0);
+                time = heap.getMin(table);//get the first node than push to bottom
+                CollisionData cd = null;
+                if ( i <= nwalls) { //collision with wall
+                    cd = new CollisionData(j,i, time);
+                    int bId = j - nwalls;
+                    cd.targetPos1 = Vector.addMult(balls[bId].pos, balls[bId].velocity, (time - globalTime));
+                } else {//collision with nodes
+                    cd = new CollisionData(i, j, time);
+                    int bId1 = i-nwalls, bId2 = j - nwalls;
+                    cd.targetPos1 = Vector.addMult(balls[bId1].pos, balls[bId1].velocity, (time - globalTime));
+                    cd.targetPos2 = Vector.addMult(balls[bId2].pos, balls[bId2].velocity, (time - globalTime));
                 }
-                System.out.println(minTime);
-                System.out.println(fakeMinTime);
-                System.out.println();
-//                
-//                while( ! heap.isEmpty( ) ) {
-//                    System.out.print( heap.removeMin( ) + " " );
-//                }
-//                System.out.println();
-                //************************************************
-		// Now go back and look for any entries which have same collision time as the min.
-		// This is to handle situation where multiple pairs could have same collision times. 
-		for( int i=1;i<nCollisionObjects;i++) { 
-			for( int j=i+1;j<=nCollisionObjects;j++) { 
-			time = collisionTable[i][j];
-			CollisionData cd = null;
-			if (time <= minTime) { 
-				// make sure ball id is the first in collision entry
-				if ( i <= nwalls) { 
-					cd = new CollisionData(j,i, time);
-					int bId = j - nwalls;
-					cd.targetPos1 = Vector.addMult(balls[bId].pos, balls[bId].velocity, (time - globalTime));
-				} else {
-					cd = new CollisionData(i, j, time);
-					int bId1 = i-nwalls, bId2 = j - nwalls;
-					cd.targetPos1 = Vector.addMult(balls[bId1].pos, balls[bId1].velocity, (time - globalTime));
-					cd.targetPos2 = Vector.addMult(balls[bId2].pos, balls[bId2].velocity, (time - globalTime));
-				}
-				if(verbose) System.out.println("Adding cd =" + cd + "@ t=" + globalTime + " minTime ="+minTime + " ccount="+collisionCount);
-				collisions[collisionCount++] = cd;
-			}
-			}
-		}	
+                if(verbose) System.out.println("Adding cd =" + cd + "@ t=" + globalTime + " minTime ="+minTime + " ccount="+collisionCount);
+                collisions[collisionCount++] = cd;
 			
 	}
 	
@@ -410,16 +353,13 @@ public class CollidingBalls extends JPanel implements ActionListener {
                         
                         
 			if ( i > bIndex) { 
-                            //************************************
-				collisionTable[bIndex][i] = collideTime;
-                                heap.delete(table[i][bIndex],table);
+                                //goes to the heap index location and shiftdown
+                                //heap.delete(table[i][bIndex],table);
+                                //update the value and push it back up
                                 heap.update(table[i][bIndex], collideTime, table);
-                                //System.out.println(collideTime+" hi ");
-                                
-                                //heap.add(bIndex, i, collisionTable[bIndex][i]);
                                 
                                 
-                                //changeKey();
+                                
 				if (collideTime < minTime){
 					minTime = collideTime;
 					minObj = i;
@@ -428,65 +368,31 @@ public class CollidingBalls extends JPanel implements ActionListener {
 
 			// Now update the column entries for which i < bIndex..
 			if (i<bIndex) { 
-				double prevTime = collisionTable[i][bIndex];
-				minCol = rowMinimum[i];
-				double rowminTime = collisionTable[i][minCol];
-				collisionTable[i][bIndex] = collideTime;
-                                heap.delete(table[i][bIndex],table);
+                                //goes to the heap index location and shiftdown
+                                //heap.delete(table[i][bIndex],table);
+                                //update the value and push it back up
                                 heap.update(table[i][bIndex], collideTime, table);
-                                
-                                //System.out.println(collideTime);
-//                                if(collideTime != Integer.MAX_VALUE){
-//                                    heap.add(i, bIndex, collideTime);
-//                                    //heap.print();
-//                                }
-				if (rowminTime > collideTime) { 
-					rowMinimum[i] = bIndex;
-				}
-				if (minCol == bIndex && prevTime < collideTime) { 
-					// min is invalid, have to recompute the min for the ithm row
-					double iTimeMin = Integer.MAX_VALUE;
-					int iminCol = 0;
-					double itime;
-					int j=0;
-					for (j=1;j<=nwalls+nballs;j++) { 
-						if (j==i) 
-							continue;
-						itime = collisionTable[i][j];
-						if (itime < iTimeMin) { 
-							iTimeMin = itime;
-							iminCol = j;
-						}
-					}
-					rowMinimum[i] = iminCol;
-				}
 			}
 		}
-                
-                heap.print();
 		rowMinimum[bIndex] = minObj;
 	}
         
-        public void ChangeKey(int count){
-            
-        }
 	
-	public void printTable() { 
-		int nObj = nwalls + nballs;
-		String str;
-		for(int i=1;i<=nObj;i++) { 
-			System.out.print("c[" +i + "]=");
-			for(int j=i+1;j<=nObj;j++) { 
-				if ( j== rowMinimum[i]) str ="R=";
-				else str = " ";
-				
-				if (collisionTable[i][j] == Integer.MAX_VALUE) {
-					continue;
-				} else {
-					System.out.print( str + "["+j+"]"+collisionTable[i][j] + ", ");
-				}
-			}
-			System.out.println(" | rowMin = " + rowMinimum[i]);			
+	public void printTable() { // print the column and rows
+            int nObj = nwalls + nballs;
+            String str;
+            for(int i=1;i<=nObj;i++) { 
+		System.out.print("c[" +i + "]=");
+		for(int j=i+1;j<=nObj;j++) { 
+                    if ( j== rowMinimum[i]) str ="R=";
+                    else str = " ";
+                    if (heap.indexOf(table[i][j]) == Integer.MAX_VALUE) {
+                        continue;
+                    }else{
+                    System.out.print( str + "["+j+"]"+ heap.indexOf(table[i][j]) + ", ");
+                    }
+		}
+		System.out.println(" | rowMin = " + rowMinimum[i]);			
 		}
 	}
 	public void handleCollision(CollisionData cd) {
