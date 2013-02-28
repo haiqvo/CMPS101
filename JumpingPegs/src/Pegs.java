@@ -9,12 +9,14 @@
  */
 public class Pegs {
     private StringBuffer pegs;
+    StringBuffer temp;
     int numPegs;
     int initialPegs;
     int secondPegs;
     Moves[] possibleMoves;
     Pegs(StringBuffer num){
         pegs = num;
+        temp = num;
         //System.out.println(pegs);
         
     }
@@ -28,12 +30,8 @@ public class Pegs {
             int compare = Character.getNumericValue(pegs.charAt(c));
             if(compare == 1){
                 return 0;
-            }else{
-                if(d == 1){
-                    c++;
-                }else{
-                    c--;
-                }
+            }
+            else if (compare == 0){
                 if(c<pegs.length() && c>=0){
                     if(d==1)
                         c++;
@@ -50,24 +48,38 @@ public class Pegs {
         }
         return 2;
     }
-    public void allPossibleSolution(){
+    public int allPossibleSolution(){
         possibleMoves = new Moves[pegs.length()*2];
         for (int i = 0; i<pegs.length()*2; i++){
             possibleMoves[i] = new Moves(0,0);
         }
         int count = 0;
         for(int i = 0 ; i<pegs.length(); i++){
-            if(possibleJump(i+1,1) == 0){
-                possibleMoves[count] =new Moves(i, i+2);
-                System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
-                count++;
-            }
-            if(possibleJump(i+1,1) == 1){
-                possibleMoves[count] =new Moves(i, i+3);
-                System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
-                count++;
+            int initial = Character.getNumericValue(pegs.charAt(i));
+            if(initial == 0){
+                if(possibleJump(i+1,1) == 0){
+                    if(i+2 < pegs.length()){
+                        int compare = Character.getNumericValue(pegs.charAt(i+2));
+                        if(compare == 0){
+                            possibleMoves[count] =new Moves(i, i+2);
+                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            count++;
+                        }
+                    }
+                }
+                if(possibleJump(i+1,1) == 1){
+                    if(i+3 < pegs.length()){
+                        int compare = Character.getNumericValue(pegs.charAt(i+3));
+                        if(compare == 0){
+                            possibleMoves[count] =new Moves(i, i+3);
+                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            count++;
+                        }
+                    }
+                }
             }
         }
+        return count;
     }
     
     public boolean jumpingRight(int a){
@@ -145,6 +157,12 @@ public class Pegs {
         }
         return true;
     }
+    public void jump(int a, int b){
+        if(a != b){
+            temp.setCharAt(b, '1');
+            temp.deleteCharAt(a);
+        }
+    }
     
     public boolean recursiveBackTracking(int index, int initial){
         boolean successful;
@@ -152,33 +170,42 @@ public class Pegs {
             return true;
         }else{
             successful = false;
-            while(index<pegs.length()){
-                if(this.jumpingRight(index)){
-                    System.out.println(index+ " i");
-                    index++;
-                    this.printString();
-                    successful = this.recursiveBackTracking(index, initial);
-                    if(!successful){
-                        System.out.println(index);
-                        this.printString();
-                    }
-                }else if(this.jumpingLeft(index)){
-                    System.out.println(index+ " h");
-                    index++;
-                    this.printString();
-                    successful = this.recursiveBackTracking(index, initial);
-                    if(!successful){
-                        System.out.println(index);
-                        this.printString();
-                    }
-                }
+            int count = this.allPossibleSolution();
+            if(count == 0){
+                
             }
+            for(int i = 0; i<count; i++){
+                this.jump(this.possibleMoves[i].first, this.possibleMoves[i].second);
+                this.printString();
+                successful = this.recursiveBackTracking(index, initial);
+            }
+//            while(index<pegs.length()){
+//                if(this.jumpingRight(index)){
+//                    System.out.println(index+ " i");
+//                    index++;
+//                    this.printString();
+//                    successful = this.recursiveBackTracking(index, initial);
+//                    if(!successful){
+//                        System.out.println(index);
+//                        this.printString();
+//                    }
+//                }else if(this.jumpingLeft(index)){
+//                    System.out.println(index+ " h");
+//                    index++;
+//                    this.printString();
+//                    successful = this.recursiveBackTracking(index, initial);
+//                    if(!successful){
+//                        System.out.println(index);
+//                        this.printString();
+//                    }
+//                }
+//            }
             
       }
         return successful;
     }
     
     public void printString(){
-        System.out.println(pegs);
+        System.out.println(temp);
     }
 }

@@ -17,7 +17,6 @@ public class JumpingPegs {
         strbuf = new StringBuffer(numberOfpegs);
         //System.out.print(numberOfpegs);
         Pegs jumpPegs = new Pegs(strbuf);
-        jumpPegs.allPossibleSolution();
 //        jumpPegs.jumpingLeft(4);
 //        jumpPegs.printString();
 //        jumpPegs.jumpingRight(2);
@@ -26,8 +25,9 @@ public class JumpingPegs {
 //        jumpPegs.printString();
 //        jumpPegs.jumpingLeft(4);
 //        jumpPegs.printString();
-        //int initialPegs = jumpPegs.numberOfIndex();
-        //jumpPegs.recursiveBackTracking(0, initialPegs);
+        //jumpPegs.allPossibleSolution();
+        int initialPegs = jumpPegs.numberOfIndex();
+        jumpPegs.recursiveBackTracking(0, initialPegs);
     }
 //    public void findSafeSpot(int index) {
 //        if (index == lastOfIndex) { // base case: a solution!
