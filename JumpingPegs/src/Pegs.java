@@ -10,9 +10,13 @@
 public class Pegs {
     private StringBuffer pegs;
     int numPegs;
+    int initialPegs;
+    int secondPegs;
+    Moves[] possibleMoves;
     Pegs(StringBuffer num){
         pegs = num;
         //System.out.println(pegs);
+        
     }
     
     public int numberOfIndex(){
@@ -20,26 +24,55 @@ public class Pegs {
     }
     
     public int possibleJump(int c, int d){
-        int compare = Character.getNumericValue(pegs.charAt(c));
-        if(compare == 1){
-            return 0;
-        }else{
-            if(d == 1){
-                c++;
+        if(c < pegs.length() ){
+            int compare = Character.getNumericValue(pegs.charAt(c));
+            if(compare == 1){
+                return 0;
             }else{
-                c--;
-            }
-            compare = Character.getNumericValue(pegs.charAt(c));
-            if(compare == 0){
-                return 1;
+                if(d == 1){
+                    c++;
+                }else{
+                    c--;
+                }
+                if(c<pegs.length() && c>=0){
+                    if(d==1)
+                        c++;
+                    else
+                        c--;
+                    if(c<pegs.length() && c>=0){
+                        compare = Character.getNumericValue(pegs.charAt(c));
+                        if(compare == 0){
+                            return 1;
+                        }
+                    }
+                }
             }
         }
         return 2;
     }
+    public void allPossibleSolution(){
+        possibleMoves = new Moves[pegs.length()*2];
+        for (int i = 0; i<pegs.length()*2; i++){
+            possibleMoves[i] = new Moves(0,0);
+        }
+        int count = 0;
+        for(int i = 0 ; i<pegs.length(); i++){
+            if(possibleJump(i+1,1) == 0){
+                possibleMoves[count] =new Moves(i, i+2);
+                System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                count++;
+            }
+            if(possibleJump(i+1,1) == 1){
+                possibleMoves[count] =new Moves(i, i+3);
+                System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                count++;
+            }
+        }
+    }
     
-    public void jumpingRight(int a){
-        if(a == 1){
-            return;
+    public boolean jumpingRight(int a){
+        if(a<0 || a>this.numberOfIndex()){
+            return false;
         }
         int c = a + 1;
         int b;
@@ -52,26 +85,27 @@ public class Pegs {
             else if(jumpPossible == 1){
                 b = a + 3;
             }else{
-                return;
+                return false;
             }
         }else{
-            return;
+            return false;
         }
         if(b < this.numberOfIndex()){
             int initial = Character.getNumericValue(pegs.charAt(a));
             int compare = Character.getNumericValue(pegs.charAt(b));
             //System.out.println(initial +" "+ compare);
-            if(compare == 0){
-                pegs.setCharAt(a, '1');
-                pegs.deleteCharAt(b);
+            if(compare == 0 && initial == 0){
+                pegs.setCharAt(b, '1');
+                pegs.deleteCharAt(a);
+                return true;
             }
-            
         }
+        return false;
     }  
     
-    public void jumpingLeft(int a){
-        if(a == 1){
-            return;
+    public boolean jumpingLeft(int a){
+        if(a<0 || a>this.numberOfIndex()){
+            return false;
         }
         int c = a - 1;
         int b;
@@ -84,21 +118,64 @@ public class Pegs {
             else if(jumpPossible == 1){
                 b = a - 3;
             }else{
-                return;
+                return false;
             }
         }else{
-            return;
+            return false;
         }
         if(b >= 0){
             int initial = Character.getNumericValue(pegs.charAt(a));
             int compare = Character.getNumericValue(pegs.charAt(b));
             //System.out.println(initial +" "+ compare);
-            if(compare == 0){
-                pegs.setCharAt(a, '1');
-                pegs.deleteCharAt(b);
+            if(compare == 0 && initial == 0){
+                pegs.setCharAt(b, '1');
+                pegs.deleteCharAt(a);
+                return true;
             }
             
         }
+        return false;
+    }
+    
+    public boolean complete(){
+        for(int i = 0; i<pegs.length(); i++){
+            if(pegs.charAt(i) == '0'){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean recursiveBackTracking(int index, int initial){
+        boolean successful;
+        if(this.complete()){
+            return true;
+        }else{
+            successful = false;
+            while(index<pegs.length()){
+                if(this.jumpingRight(index)){
+                    System.out.println(index+ " i");
+                    index++;
+                    this.printString();
+                    successful = this.recursiveBackTracking(index, initial);
+                    if(!successful){
+                        System.out.println(index);
+                        this.printString();
+                    }
+                }else if(this.jumpingLeft(index)){
+                    System.out.println(index+ " h");
+                    index++;
+                    this.printString();
+                    successful = this.recursiveBackTracking(index, initial);
+                    if(!successful){
+                        System.out.println(index);
+                        this.printString();
+                    }
+                }
+            }
+            
+      }
+        return successful;
     }
     
     public void printString(){

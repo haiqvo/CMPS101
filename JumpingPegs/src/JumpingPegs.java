@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.regex.*;
 import static java.lang.System.*;
+import java.lang.Math;
+import java.util.*;
 
 /*
  * The main class for my game of life.
@@ -15,10 +17,18 @@ public class JumpingPegs {
         strbuf = new StringBuffer(numberOfpegs);
         //System.out.print(numberOfpegs);
         Pegs jumpPegs = new Pegs(strbuf);
-        jumpPegs.jumpingRight(6);
-        jumpPegs.printString();
+        jumpPegs.allPossibleSolution();
+//        jumpPegs.jumpingLeft(4);
+//        jumpPegs.printString();
+//        jumpPegs.jumpingRight(2);
+//        jumpPegs.printString();
+//        jumpPegs.jumpingRight(0);
+//        jumpPegs.printString();
+//        jumpPegs.jumpingLeft(4);
+//        jumpPegs.printString();
+        //int initialPegs = jumpPegs.numberOfIndex();
+        //jumpPegs.recursiveBackTracking(0, initialPegs);
     }
-    
 //    public void findSafeSpot(int index) {
 //        if (index == lastOfIndex) { // base case: a solution!
 //            solutionsFound++;
