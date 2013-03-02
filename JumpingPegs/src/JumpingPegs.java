@@ -12,40 +12,19 @@ import java.util.*;
 public class JumpingPegs {
     
     static void scanfile (Scanner input, String filename) {
-        String numberOfpegs = input.nextLine();
+        int numberOfpegs = input.nextInt();
+        String pegs = input.nextLine();
+        pegs = input.nextLine();
+        pegs = pegs.replaceAll("\\s", "");
         StringBuffer strbuf;
-        strbuf = new StringBuffer(numberOfpegs);
-        //System.out.print(numberOfpegs);
+        strbuf = new StringBuffer(pegs);
         Pegs jumpPegs = new Pegs(strbuf);
-//        jumpPegs.jumpingLeft(4);
-//        jumpPegs.printString();
-//        jumpPegs.jumpingRight(2);
-//        jumpPegs.printString();
-//        jumpPegs.jumpingRight(0);
-//        jumpPegs.printString();
-//        jumpPegs.jumpingLeft(4);
-//        jumpPegs.printString();
-        //jumpPegs.allPossibleSolution();
-        jumpPegs.recursiveBackTracking(0);
+        System.out.println(pegs);
+        if(jumpPegs.recursiveBackTracking(0)){
+            jumpPegs.printStack();
+        }
     }
-//    public void findSafeSpot(int index) {
-//        if (index == lastOfIndex) { // base case: a solution!
-//            solutionsFound++;
-//            displayBoard();
-//            if (solutionsFound >= solutionTarget)
-//                System.exit(0);
-//            return;
-//        } 
-//        for (int col = 0; col < lastOfIndex; col++) {
-//            if (isSafe(index, col)) {
-//                placeQueen(index, col);
-//                // Move onto the next row.
-//                findSafeSpot(index + 1);
-//                // If we get here, we’ve backtracked.
-//                removeQueen(index, col);
-//            }
-//        }
-//    }
+
     
     /*
      * main is the main function in the program and is mostly 

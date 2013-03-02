@@ -12,6 +12,7 @@ import java.util.Stack;
  */
 public class Pegs {
     private StringBuffer pegs;
+    StringBuffer original;
     int numPegs;
     int initialPegs;
     int secondPegs;
@@ -21,15 +22,14 @@ public class Pegs {
     Moves[] setMoves;
     Stack<Moves> stack;
     Pegs(StringBuffer num){
+        original = new StringBuffer(num);
         pegs = num;
+        
         stack = new Stack<Moves>();
         //System.out.println(pegs);
         
     }
     
-    public int numberOfIndex(){
-        return pegs.length();
-    }
     
     public int possibleJump(int c, int d){
         if(c < pegs.length() ){
@@ -68,10 +68,10 @@ public class Pegs {
                         int compare = Character.getNumericValue(pegs.charAt(i+2));
                         if(compare == 0){
                             possibleMoves[count] =new Moves(i, i+2);
-                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            //System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
                             count++;
                             possibleMoves[count] =new Moves(i+2, i);
-                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            //System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
                             count++;
                         }
                     }
@@ -82,10 +82,10 @@ public class Pegs {
                         int compare = Character.getNumericValue(pegs.charAt(i+3));
                         if(compare == 0){
                             possibleMoves[count] =new Moves(i, i+3);
-                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            //System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
                             count++;
                             possibleMoves[count] =new Moves(i+3, i);
-                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            //System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
                             count++;
                         }
                     }
@@ -139,11 +139,8 @@ public class Pegs {
             for(Moves move : setMoves){
                 if(this.jump(move.first,move.second)){
                     stack.push(move);
-                }
-                
-                this.printString();
-                if(count == 0){
-                }
+                }   
+                //this.printString();
                 successful = this.recursiveBackTracking(index+1);
                 if(!successful){
                     this.jumpBack();
@@ -156,6 +153,23 @@ public class Pegs {
             
       }
         return successful;
+    }
+    public void printStack(){
+        Moves[] finalMoves = new Moves[stack.size()];
+        int count = 0;
+        while(!stack.empty()){
+            Moves temp = stack.pop();
+            finalMoves[count] = new Moves(temp.first, temp.second);
+            count++;
+        }
+        int length = finalMoves.length-1;
+        //System.out.println(this.original);
+        while(length>=0){
+            original.setCharAt(finalMoves[length].second, '1');
+            original.deleteCharAt(finalMoves[length].first);
+            length--;
+            System.out.println(this.original);
+        }
     }
     
     public void printString(){
