@@ -26,8 +26,7 @@ public class JumpingPegs {
 //        jumpPegs.jumpingLeft(4);
 //        jumpPegs.printString();
         //jumpPegs.allPossibleSolution();
-        int initialPegs = jumpPegs.numberOfIndex();
-        jumpPegs.recursiveBackTracking(0, initialPegs);
+        jumpPegs.recursiveBackTracking(0);
     }
 //    public void findSafeSpot(int index) {
 //        if (index == lastOfIndex) { // base case: a solution!

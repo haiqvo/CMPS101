@@ -1,3 +1,6 @@
+
+import java.util.Stack;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,14 +12,17 @@
  */
 public class Pegs {
     private StringBuffer pegs;
-    StringBuffer temp;
     int numPegs;
     int initialPegs;
     int secondPegs;
+    int first;
+    int second;
     Moves[] possibleMoves;
+    Moves[] setMoves;
+    Stack<Moves> stack;
     Pegs(StringBuffer num){
         pegs = num;
-        temp = num;
+        stack = new Stack<Moves>();
         //System.out.println(pegs);
         
     }
@@ -64,9 +70,13 @@ public class Pegs {
                             possibleMoves[count] =new Moves(i, i+2);
                             System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
                             count++;
+                            possibleMoves[count] =new Moves(i+2, i);
+                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            count++;
                         }
                     }
                 }
+
                 if(possibleJump(i+1,1) == 1){
                     if(i+3 < pegs.length()){
                         int compare = Character.getNumericValue(pegs.charAt(i+3));
@@ -74,138 +84,81 @@ public class Pegs {
                             possibleMoves[count] =new Moves(i, i+3);
                             System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
                             count++;
+                            possibleMoves[count] =new Moves(i+3, i);
+                            System.out.println(possibleMoves[count].first + "" +possibleMoves[count].second);
+                            count++;
                         }
                     }
                 }
             }
         }
+        setMoves = new Moves[count];
+        System.arraycopy(possibleMoves, 0, setMoves, 0, count);
         return count;
     }
     
-    public boolean jumpingRight(int a){
-        if(a<0 || a>this.numberOfIndex()){
-            return false;
-        }
-        int c = a + 1;
-        int b;
-        int jumpPossible;
-        if(c < this.numberOfIndex()){
-            jumpPossible = this.possibleJump(c, 1);
-            if(jumpPossible == 0){
-                b = a + 2;
-            }
-            else if(jumpPossible == 1){
-                b = a + 3;
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
-        if(b < this.numberOfIndex()){
-            int initial = Character.getNumericValue(pegs.charAt(a));
-            int compare = Character.getNumericValue(pegs.charAt(b));
-            //System.out.println(initial +" "+ compare);
-            if(compare == 0 && initial == 0){
-                pegs.setCharAt(b, '1');
-                pegs.deleteCharAt(a);
-                return true;
-            }
-        }
-        return false;
-    }  
-    
-    public boolean jumpingLeft(int a){
-        if(a<0 || a>this.numberOfIndex()){
-            return false;
-        }
-        int c = a - 1;
-        int b;
-        int jumpPossible;
-        if(c >= 0){
-            jumpPossible = this.possibleJump(c, 0);
-            if(jumpPossible == 0){
-                b = a - 2;
-            }
-            else if(jumpPossible == 1){
-                b = a - 3;
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
-        if(b >= 0){
-            int initial = Character.getNumericValue(pegs.charAt(a));
-            int compare = Character.getNumericValue(pegs.charAt(b));
-            //System.out.println(initial +" "+ compare);
-            if(compare == 0 && initial == 0){
-                pegs.setCharAt(b, '1');
-                pegs.deleteCharAt(a);
-                return true;
-            }
-            
-        }
-        return false;
-    }
     
     public boolean complete(){
         for(int i = 0; i<pegs.length(); i++){
-            if(pegs.charAt(i) == '0'){
+            if(Character.getNumericValue(pegs.charAt(i)) == 0){
                 return false;
             }
         }
         return true;
     }
-    public void jump(int a, int b){
+    public boolean jump(int a, int b){
         if(a != b){
-            temp.setCharAt(b, '1');
-            temp.deleteCharAt(a);
+            first = a;
+            second = b;
+            pegs.setCharAt(b, '1');
+            pegs.deleteCharAt(a);
+            return true;
         }
+        return false;
     }
     
-    public boolean recursiveBackTracking(int index, int initial){
+    public void jumpBack(){
+        Moves moves = stack.pop();
+        this.pegs.insert(moves.first, "0");
+        if(Character.getNumericValue(pegs.charAt(moves.second)) == 1){
+            this.pegs.setCharAt(moves.second, '0');
+        }else{
+            this.pegs.deleteCharAt(moves.first);
+        }
+        
+    }
+    
+    public boolean recursiveBackTracking(int index){
         boolean successful;
         if(this.complete()){
             return true;
         }else{
             successful = false;
             int count = this.allPossibleSolution();
-            if(count == 0){
+            //System.out.println(count);
+            for(Moves move : setMoves){
+                if(this.jump(move.first,move.second)){
+                    stack.push(move);
+                }
+                
+                this.printString();
+                if(count == 0){
+                }
+                successful = this.recursiveBackTracking(index+1);
+                if(!successful){
+                    this.jumpBack();
+                }else{
+                    return successful;
+                }
                 
             }
-            for(int i = 0; i<count; i++){
-                this.jump(this.possibleMoves[i].first, this.possibleMoves[i].second);
-                this.printString();
-                successful = this.recursiveBackTracking(index, initial);
-            }
-//            while(index<pegs.length()){
-//                if(this.jumpingRight(index)){
-//                    System.out.println(index+ " i");
-//                    index++;
-//                    this.printString();
-//                    successful = this.recursiveBackTracking(index, initial);
-//                    if(!successful){
-//                        System.out.println(index);
-//                        this.printString();
-//                    }
-//                }else if(this.jumpingLeft(index)){
-//                    System.out.println(index+ " h");
-//                    index++;
-//                    this.printString();
-//                    successful = this.recursiveBackTracking(index, initial);
-//                    if(!successful){
-//                        System.out.println(index);
-//                        this.printString();
-//                    }
-//                }
-//            }
+
             
       }
         return successful;
     }
     
     public void printString(){
-        System.out.println(temp);
+        System.out.println(pegs);
     }
 }
