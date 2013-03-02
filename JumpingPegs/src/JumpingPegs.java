@@ -16,8 +16,14 @@ public class JumpingPegs {
         String pegs = input.nextLine();
         pegs = input.nextLine();
         pegs = pegs.replaceAll("\\s", "");
+        int pegsInt = Integer.parseInt(pegs.toString());
         StringBuffer strbuf;
         strbuf = new StringBuffer(pegs);
+//        HashTables table = new HashTables();
+//        table.put(pegsInt, strbuf);
+//        if(table.get(pegsInt, strbuf)){
+//            System.out.println("found");
+//        }
         Pegs jumpPegs = new Pegs(strbuf);
         System.out.println(pegs);
         if(jumpPegs.recursiveBackTracking(0)){

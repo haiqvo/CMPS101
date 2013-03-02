@@ -11,19 +11,19 @@ import java.util.Stack;
  * @author hai
  */
 public class Pegs {
+    int testCount = 0;
     private StringBuffer pegs;
     StringBuffer original;
-    int numPegs;
-    int initialPegs;
-    int secondPegs;
     int first;
     int second;
     Moves[] possibleMoves;
     Moves[] setMoves;
     Stack<Moves> stack;
+    HashTables table;
     Pegs(StringBuffer num){
         original = new StringBuffer(num);
         pegs = num;
+        table = new HashTables();
         
         stack = new Stack<Moves>();
         //System.out.println(pegs);
@@ -130,30 +130,38 @@ public class Pegs {
     
     public boolean recursiveBackTracking(int index){
         boolean successful;
-        if(this.complete()){
-            return true;
-        }else{
-            successful = false;
-            int count = this.allPossibleSolution();
-            //System.out.println(count);
-            for(Moves move : setMoves){
-                if(this.jump(move.first,move.second)){
-                    stack.push(move);
-                }   
-                //this.printString();
-                successful = this.recursiveBackTracking(index+1);
-                if(!successful){
-                    this.jumpBack();
-                }else{
-                    return successful;
+        int pegsInt = Integer.parseInt(pegs.toString());
+        successful = false;
+            if(this.complete()){
+                return true;
+            }else{
+                int count = this.allPossibleSolution();
+                    //System.out.println(count);
+                for(Moves move : setMoves){
+                    if(this.jump(move.first,move.second)){
+                        stack.push(move);
+                    }   
+                    //this.printString();
+                    successful = this.recursiveBackTracking(index+1);
+                    if(!successful){
+                        testCount++;
+                        System.out.println(testCount);
+                        this.insertHashTable(pegs);
+                        this.jumpBack();
+                    }else{
+                        return successful;
+                    }
                 }
-                
             }
-
-            
-      }
         return successful;
     }
+    
+    public void insertHashTable(StringBuffer pegs){
+        int pegsInt = Integer.parseInt(pegs.toString());
+        table.put(pegsInt, pegs);
+        //table.debug();
+    }
+    
     public void printStack(){
         Moves[] finalMoves = new Moves[stack.size()];
         int count = 0;
