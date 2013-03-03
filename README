@@ -1,0 +1,8 @@
+Hai Vo 
+hqvo@ucsc.edu
+JumpingPegs
+
+The jumpingPegs program uses a recursive backtracking to find the answer to the number of pegs. It also uses a hash table to store boards that are impossible to solve so the big table are able to be solve quickly. The game is a peg and the pegs are allowed to jump 2 pegs and land on another peg. The goal is to have all of the pegs paired up. I notice that solveable board tend to run faster becuase it only goes through half the board and stops, as compared to unsolveable boards where it has to cycle through twice as much. The hash table also has speed up the run time as oppose to without it. unsolveable and large board seems to be cut in half. Overall the program seem to run at a decent speed compared to how much the recursive and hash table uses there are. In the recursive function I chose to get rid of the index and have a foreach loop which to be better and the idea of using a stack that pushes moves and pop bad moves so that by the end it has a collection of good moves that is used to print the correct answer.
+
+HOW TO RUN
+*type "make all" in the Terminal

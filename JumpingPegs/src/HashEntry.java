@@ -1,6 +1,6 @@
 public class HashEntry {
-      private int key;
-      private StringBuffer value;
+      private int key;//the key to hash
+      private StringBuffer value;//the stringBuffer 
  
       HashEntry(int key, StringBuffer value) {
             this.key = key;
@@ -8,7 +8,7 @@ public class HashEntry {
       }
  
       public String getValue() {
-            return value.toString();
+            return value.toString();//return the value as a string
       }
  
       public void setValue(StringBuffer value) {
@@ -16,6 +16,6 @@ public class HashEntry {
       }
  
       public int getKey() {
-            return key;
+            return key;//return key
       }
 }

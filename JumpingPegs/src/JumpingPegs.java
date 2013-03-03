@@ -15,19 +15,15 @@ public class JumpingPegs {
         int numberOfpegs = input.nextInt();
         String pegs = input.nextLine();
         pegs = input.nextLine();
-        pegs = pegs.replaceAll("\\s", "");
-        int pegsInt = Integer.parseInt(pegs.toString());
-        StringBuffer strbuf;
+        pegs = pegs.replaceAll("\\s", "");//get rid of the whitespace
+        StringBuffer strbuf;//put it in a stringbuffer
         strbuf = new StringBuffer(pegs);
-//        HashTables table = new HashTables();
-//        table.put(pegsInt, strbuf);
-//        if(table.get(pegsInt, strbuf)){
-//            System.out.println("found");
-//        }
         Pegs jumpPegs = new Pegs(strbuf);
         System.out.println(pegs);
-        if(jumpPegs.recursiveBackTracking(0)){
-            jumpPegs.printStack();
+        if(jumpPegs.recursiveBackTracking()){//call the backtracking
+            jumpPegs.printStack();//print solution
+        }else{
+            System.out.println("No Solution Found");
         }
     }
 

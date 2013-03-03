@@ -8,8 +8,9 @@
  * @author hai
  */
 public class Moves {
-    int first;
-    int second;
+    int first;//the peg that will be pick up
+    int second;//the peg that will be double
+    
     public Moves(int i, int j){
         first = i;
         second = j;
