@@ -1,7 +1,0 @@
-Hai Vo 
-hqvo@ucsc.edu
-CollidingBalls
-The original program is O(n^2) but after using a heap it has now change to 0(nlgn). I put in a heap class and all of the managing and sorting of the heap called in there. original how the program is done and everything is put in a 2D array and the min time is found by going into the array. Now it is different, the 2D array is still there but it hold the index to the heap instead of the time. Once it is put in the heap it is sorted with the min being at the top of the array and the max at the bottom. The heap hold 3 value the i and j of the 2D array and collision time. The nodes in the heap is never deleted the collision time is simply reset to the max value and shifted down. This also ocurrs for updating to a new collision time, because once a collision happens some times have to be reset because the change in path.
-
-HOW TO RUN
-*type "make all" in the Terminal
