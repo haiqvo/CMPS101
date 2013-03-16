@@ -1,3 +1,8 @@
+/*
+ * Hai Vo 
+ * hqvo@ucsc.edu
+ * this is my java code for a red black tree
+ */
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.*;
@@ -5,7 +10,7 @@ import static java.lang.System.*;
 import java.util.*;
 
 /*
- * The main class for my game of life.
+ * The main class for my Red Black Tree.
  */
 
 public class RedBlackTree {
@@ -14,15 +19,37 @@ public class RedBlackTree {
         Tree redBlackTree = new Tree();
         while(input.hasNext()){
             String word = input.next();
-            if(word.equals("i")){
+            if(word.equals("i")){// the insertion
                 int key = input.nextInt();
                 node newNode = new node();
                 newNode.key = key;
                 redBlackTree.insertion(newNode);
             }
+            else if(word.equals("f")){//searching for node
+                int key = input.nextInt();
+                redBlackTree.search(key);
+            }
+            else if(word.equals("pt")){// printing tree
+                redBlackTree.printOut();
+            }
+            else if(word.equals("pn")){//printing node
+                redBlackTree.printNode();
+            }
+            else if(word.equals("max")){// the max node
+                System.out.println("the max is :" + redBlackTree.max);
+            }
+            else if(word.equals("min")){// the min node
+                System.out.println("the min is :" + redBlackTree.min);
+            }
+            else if(word.equals("s")){// the successor
+                redBlackTree.successor();
+            }
+            else if(word.equals("p")){// the predecessor 
+                redBlackTree.predecessor();
+            }else{//if there is no such command
+                System.out.println("improper command");
+            }
         }
-        redBlackTree.printOut();
-        System.out.println("root: "+redBlackTree.root.key);
     }
 
     
