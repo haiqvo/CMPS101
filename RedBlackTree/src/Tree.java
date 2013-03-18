@@ -1,22 +1,25 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Tree class that handles all of the tree function.
  */
 
 /**
  *
- * @author hai
+ * @author hai vo
  */
 public class Tree {
-    node root;
-    node nil;
-    node current_node;
+    node root;// the root of the tree
+    node nil;// the null node
+    node current_node;// the pointer to current node
     final int BLACK = 1;
     final int RED = 0;
-    int max;
-    int min;
+    int max;// the max key
+    int min;// the min key
     
+    /*
+     * The tree constructor
+     */
     Tree(){
+        // setting the nil in the constructor
         nil = new node();
         nil.left = null;
         nil.right = null;
@@ -24,9 +27,11 @@ public class Tree {
         root = nil;
     }
 
-    
+    /*
+     * print the color and the key of current node
+     */
     public void printNode(){
-        if(current_node == nil){
+        if(current_node == nil){//check if current node is nil
             System.out.println("the current node is nil");
         }else{
             System.out.println("the current node's key:" + current_node.key);
@@ -38,6 +43,9 @@ public class Tree {
         }
     }
     
+    /*
+     * the fuction is used in the f
+     */
     public void search(int x){
         current_node = find(x);
     }
@@ -45,7 +53,7 @@ public class Tree {
     private node find(int x) {
         node iterator = root;
         //Start travelling the tree from the root.
-        while (true) {
+        while (true) {// cycle through the tree searching for the node
             if (iterator != nil) {
                 if (iterator.key == x) {
                     return iterator;
@@ -60,13 +68,19 @@ public class Tree {
         }
     }
     
+    /*
+     * the rotate left function
+     */
     public void rotateLeft(node current){
         node tmp = current.right;
         swap(current, tmp);
         swapRightNode(current, tmp.left);
         swapLeftNode(tmp, current);
     }
-        
+    
+    /*
+     * the rotate right function
+     */
     public void rotateRight(node current){
         node tmp = current.left;
         swap(current, tmp);
@@ -74,6 +88,9 @@ public class Tree {
         swapRightNode(tmp, current);
     }
     
+    /*
+     * the swap function swap a node with another node
+     */
     private void swap(node oldNode, node newNode) {
         if (oldNode.p != nil) {
             if (oldNode.equals(oldNode.p.left)) {
@@ -88,30 +105,42 @@ public class Tree {
  
     }
     
+    /*
+     * swaping the left and current node
+     */
     private void swapLeftNode(node current, node newLeft) {
         current.left = newLeft;
         newLeft.p = current;
     }
     
+    /*
+     * swaping the right and current node.
+     */
     private void swapRightNode(node current, node newRight) {
         current.right = newRight;
         newRight.p = current;
     }
-   
+    
+    /*
+     * the insertion function inserts a new node
+     */
     public void insertion(node z){
-        if(z.key > max){
+        if(z.key > max){// check for the max in O(1)
             max = z.key;
         }
-        if(z.key < min){
+        if(z.key < min){// check for the min in O(1)
             min = z.key;
         }
         node y = this.nil;
         node x = this.root;
         while(x != this.nil){
             y = x;
-            if(z.key < x.key){
+            if(z.key == x.key){// check if the node is the same
+                return;
+            }
+            if(z.key < x.key){// move left if less than
                 x = x.left;
-            }else{
+            }else{// else move right
                 x = x.right;
             }
         }
@@ -125,12 +154,12 @@ public class Tree {
         else{
             y.right = z;
         }
-        z.right = this.nil;
-        z.left = this.nil;
-        z.color = z.RED;
+        z.right = this.nil;//point to the nil
+        z.left = this.nil;// point to the nil
+        z.color = z.RED;// set it to red 
         //System.out.println("Hello");
         //this.rotateLeft(z);
-        this.insertionfix(z);
+        this.insertionfix(z);// rebalance the tree
     }
     
     public void insertionfix(node z){
@@ -138,38 +167,38 @@ public class Tree {
             //System.out.print("in : ");
             if(z.p == z.p.p.left){
                 //System.out.println("2");
-                node y = z.p.p.right;
+                node y = z.p.p.right;//case 1
                 if(y.color == RED){
                     z.p.color = BLACK;
                     y.color = BLACK;
                     z.p.p.color = RED;
                     z = z.p.p;
                 }
-                else if(z == z.p.right){
+                else if(z == z.p.right){//case 2
                     z = z.p;
                     this.rotateLeft(z);
                 }
-                    z.p.color = BLACK;
+                    z.p.color = BLACK;//case 3
                     z.p.p.color = RED;
                     this.rotateRight(z.p.p);
                 
             }
-            else if(z.p == z.p.p.right){
+            else if(z.p == z.p.p.right){// if the uncle is on the other side
                 //System.out.print("1");
                 node y = z.p.p.left;
-                if(y.color == RED){
+                if(y.color == RED){//case 1
                     z.p.color = BLACK;
                     y.color = BLACK;
                     z.p.p.color = RED;
                     z = z.p.p;
                 }
-                else if(z == z.p.left){
+                else if(z == z.p.left){// case 2
                     //System.out.println("5");
                     z = z.p;
                     this.rotateRight(z);
                 }else{
                     //System.out.print("4");
-                    z.p.color = BLACK;
+                    z.p.color = BLACK;//case 3
                     z.p.p.color = RED;
                     this.rotateLeft(z.p.p);
                 }
@@ -182,10 +211,13 @@ public class Tree {
         if(current_node != nil){
             return current_node = current_node.p;
         }else{
-            return current_node;
+            return current_node;//finding the predecessor
         }
     }
     
+    /*
+     * the successor funtion
+     */
      public node successor() {
         node current = current_node;
         if (current != nil) {
@@ -225,6 +257,9 @@ public class Tree {
         System.out.println();
     }
     
+    /*
+     * postOrder function
+     */
     public void postOrder(node p){
         if(p == nil){
             return;
@@ -234,6 +269,9 @@ public class Tree {
         System.out.print(p.key+ " ");
     }
     
+    /*
+     * preOrder function
+     */
     public void preOrder(node p){
         if(p == nil){
             return;
@@ -243,6 +281,9 @@ public class Tree {
         preOrder(p.right);
     }
     
+    /*
+     * inOrder function
+     */
     public void recusiveCall(node p){
         if(p==nil){
             return;
